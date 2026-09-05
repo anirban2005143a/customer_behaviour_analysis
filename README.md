@@ -1,20 +1,40 @@
 # 🛍️ Customer Behaviour Analysis
 
-An end-to-end customer shopping behaviour analysis project using **Python, PostgreSQL, and Power BI** to transform raw customer transaction data into meaningful business insights and an interactive dashboard.
+An end-to-end **Customer Behaviour Analysis** project using **Python, PostgreSQL, and Power BI** to transform raw customer shopping data into meaningful business insights through data cleaning, feature engineering, database integration, and interactive dashboard visualization.
 
 ---
 
 ## 📌 Project Overview
 
-Understanding customer behaviour is essential for businesses that want to improve **customer experience, increase sales, identify valuable customer segments, and make data-driven decisions**.
+Understanding customer behaviour is essential for businesses looking to improve customer experience, increase sales, identify valuable customer segments, and make data-driven decisions.
 
-This project analyzes a customer shopping behaviour dataset containing demographic, purchasing, subscription, payment, shipping, discount, and purchase-frequency information.
+This project analyzes a customer shopping behaviour dataset containing **3,900 customer records** with information related to:
 
-### 🔄 Project Workflow
+* Customer demographics
+* Products and categories
+* Purchase amounts
+* Subscription status
+* Payment methods
+* Shipping methods
+* Discounts and promotions
+* Purchase frequency
+* Customer ratings
 
-**Raw Data → Data Cleaning → Feature Engineering → PostgreSQL → Power BI → Business Insights**
+The project follows an end-to-end analytics workflow:
 
-The goal is to transform raw customer transaction data into a structured analytical dataset and present the resulting insights through an interactive Power BI dashboard.
+```text
+Raw Data
+   ↓
+Data Cleaning & EDA
+   ↓
+Feature Engineering
+   ↓
+PostgreSQL
+   ↓
+Power BI Dashboard
+   ↓
+Business Insights
+```
 
 ---
 
@@ -25,7 +45,7 @@ The analysis focuses on answering important business questions such as:
 * Who are the customers and how are they distributed across different age groups?
 * Which product categories and products are purchased most frequently?
 * How much do customers spend?
-* How does purchasing behaviour vary by gender and age group?
+* How does purchasing behaviour vary across different age groups and genders?
 * What payment methods are preferred by customers?
 * How frequently do customers make purchases?
 * How does subscription status relate to customer behaviour?
@@ -38,9 +58,7 @@ The analysis focuses on answering important business questions such as:
 
 ## 📊 Dataset
 
-The project uses a customer shopping behaviour dataset containing **3,900 customer records**.
-
-The original dataset contains **18 columns** covering customer demographics, product information, purchase behaviour, payment preferences, and customer experience.
+The project uses a customer shopping behaviour dataset containing **3,900 records** and **18 original columns**.
 
 ### Dataset Features
 
@@ -69,7 +87,13 @@ The original dataset contains **18 columns** covering customer demographics, pro
 
 ## 🧹 Data Cleaning & Preparation
 
-Data preparation was performed using **Python and Pandas** in the `data_cleaning.ipynb` notebook.
+Data cleaning and feature engineering were performed using **Python, Pandas, and Jupyter Notebook**.
+
+The complete workflow is available in:
+
+```text
+data_cleaning.ipynb
+```
 
 ### 1. Data Loading
 
@@ -89,11 +113,11 @@ Initial inspection includes:
 * Missing-value analysis
 * Numerical feature analysis
 
-The dataset contains **3,900 records**.
+---
 
 ### 3. Missing Value Treatment
 
-The `Review Rating` column contained missing values.
+The `Review Rating` column contained **37 missing values**.
 
 Instead of dropping these records, missing ratings were filled using the **median review rating within each product category**.
 
@@ -106,13 +130,27 @@ df['Review Rating'] = (
 
 This preserves the records while using category-specific information to handle missing ratings.
 
+---
+
 ### 4. Column Standardization
 
 Column names were converted into a consistent **lowercase and underscore-based format**.
 
 For example:
 
-`Purchase Amount (USD)` → `purchase_amount`
+```text
+Purchase Amount (USD)
+```
+
+was transformed into:
+
+```text
+purchase_amount
+```
+
+This makes the dataset easier to work with in Python, PostgreSQL, and Power BI.
+
+---
 
 ### 5. Age Group Feature Engineering
 
@@ -126,6 +164,8 @@ A new `age_group` feature was created to make demographic analysis easier.
 | 55+   | Senior      |
 
 This enables customer behaviour to be compared across meaningful demographic segments.
+
+---
 
 ### 6. Purchase Frequency Transformation
 
@@ -143,6 +183,8 @@ The categorical purchase frequency field was converted into an approximate numbe
 
 A new feature called `purchase_frequency_days` was created from this mapping.
 
+---
+
 ### 7. Redundant Column Removal
 
 The notebook checks whether `discount_applied` and `promo_code_used` contain different information.
@@ -151,93 +193,80 @@ Since the values were found to be redundant, `promo_code_used` was removed from 
 
 ---
 
-## 🗄️ PostgreSQL Integration
-
-After cleaning and feature engineering, the processed DataFrame is loaded into a PostgreSQL database.
-
-The cleaned data is stored in a table named:
+## 🏗️ Project Architecture
 
 ```text
-customer
-```
-
-The notebook uses:
-
-* **SQLAlchemy**
-* **Psycopg2**
-* **PostgreSQL**
-
-for database connectivity.
-
----
-
-## 🏗️ Project Workflow
-
-```text
-┌─────────────────────┐
-│   Raw CSV Dataset   │
-│    3,900 Records    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Python + Pandas   │
-│                     │
-│ • Data Profiling    │
-│ • Missing Values    │
-│ • Data Cleaning     │
-│ • Feature Creation  │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│     PostgreSQL      │
-│                     │
-│   customer table    │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│      Power BI       │
-│                     │
-│ Interactive         │
-│ Dashboard           │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Business Insights  │
-│ & Decision Making   │
-└─────────────────────┘
+                 ┌──────────────────────┐
+                 │   Customer CSV Data  │
+                 │     3,900 Records    │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │    Python + Pandas   │
+                 │                      │
+                 │ • Data Cleaning      │
+                 │ • EDA               │
+                 │ • Missing Values     │
+                 │ • Feature Engineering│
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │     PostgreSQL       │
+                 │                      │
+                 │   customer table     │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │       Power BI       │
+                 │                      │
+                 │ Interactive Dashboard│
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │   Business Insights  │
+                 │ & Decision Making    │
+                 └──────────────────────┘
 ```
 
 ---
 
 ## 📊 Power BI Dashboard
 
-The cleaned customer data is used to build an **interactive Power BI dashboard**.
+The cleaned customer data is connected to **Power BI** to create an interactive dashboard for exploring customer behaviour and purchasing patterns.
 
-The dashboard is designed to provide a visual overview of customer behaviour and purchasing patterns.
+The dashboard provides an overview of key business metrics and allows analysis across multiple dimensions.
 
-### Dashboard Areas
+### Dashboard Analysis
 
-The dashboard can be used to analyze:
+The dashboard covers areas such as:
 
 * Customer demographics
 * Age-group distribution
-* Gender-based purchasing behaviour
-* Product categories
+* Gender-based analysis
+* Product and category performance
 * Purchase amounts
-* Payment methods
 * Subscription behaviour
+* Payment methods
 * Purchase frequency
 * Shipping preferences
 * Discounts and promotions
 * Customer ratings
+* Seasonal purchasing behaviour
+* Customer locations
 
-### Dashboard Preview
+### 🖼️ Dashboard Preview
 
-The repository contains a dashboard screenshot in the `dashboard` directory.
+![Customer Behaviour Dashboard](dashboard/Screenshot%202026-09-05%20215157.png)
+
+### 🎥 Dashboard Walkthrough
+
+A dashboard walkthrough recording is available in the repository:
+
+`dashboard/dashboard_recording.mp4`
 
 ---
 
@@ -265,36 +294,36 @@ customer_behaviour_analysis/
 | `data_cleaning.ipynb`                        | Python-based data cleaning and feature engineering |
 | `customer_behaivior_analysis.pbix`           | Power BI dashboard                                 |
 | `Business Problem Document.pdf`              | Project/business problem documentation             |
-| `dashboard/Screenshot 2026-09-05 215157.png` | Dashboard preview image                            |
-| `dashboard/dashboard_recording.mp4`          | Dashboard walkthrough/recording                    |
+| `dashboard/Screenshot 2026-09-05 215157.png` | Dashboard preview                                  |
+| `dashboard/dashboard_recording.mp4`          | Dashboard walkthrough                              |
 | `README.md`                                  | Project documentation                              |
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Programming & Data Analysis
+### 🐍 Programming & Data Analysis
 
 * Python
 * Pandas
 * NumPy
 * Jupyter Notebook
 
-### Database
+### 🗄️ Database
 
 * PostgreSQL
 * SQLAlchemy
 * Psycopg2
 
-### Business Intelligence
+### 📊 Business Intelligence
 
 * Microsoft Power BI
 
-### Data & Reporting
+### 📁 Data & Reporting
 
 * CSV
-* Interactive Dashboards
 * Data Visualization
+* Interactive Dashboards
 * Business Analysis
 
 ---
@@ -310,27 +339,25 @@ Make sure you have the following installed:
 * PostgreSQL
 * Power BI Desktop
 
-### Clone the Repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/anirban2005143a/customer_behaviour_analysis.git
 ```
 
-### Navigate into the Project
+### 2. Navigate into the Project
 
 ```bash
 cd customer_behaviour_analysis
 ```
 
-### Install Python Dependencies
-
-Install the required Python packages:
+### 3. Install Python Dependencies
 
 ```bash
 pip install pandas numpy sqlalchemy psycopg2-binary
 ```
 
-### Run the Data Cleaning Notebook
+### 4. Run the Data Cleaning Notebook
 
 Open:
 
@@ -394,8 +421,6 @@ customer
 
 ## 📈 Key Analytical Dimensions
 
-The project enables analysis across several important dimensions.
-
 ### 👥 Customer Demographics
 
 Analyze customer behaviour by:
@@ -436,11 +461,14 @@ Compare customer preferences across:
 
 ### 📦 Delivery Behaviour
 
-Analyze customer preferences for different shipping methods.
+Analyze customer preferences across different shipping methods.
 
 ### 🎁 Promotions
 
-Evaluate customer purchasing behaviour in relation to discounts and promotional activity.
+Evaluate purchasing behaviour in relation to:
+
+* Discounts
+* Promotional activity
 
 ### ⭐ Customer Experience
 
@@ -450,7 +478,7 @@ Use review ratings to understand customer satisfaction across different product 
 
 ## 💡 Business Insights
 
-The project is designed to help answer questions that can support real-world business decisions.
+The project is designed to support real-world business decisions through customer behaviour analysis.
 
 ### Customer Segmentation
 
@@ -458,15 +486,15 @@ Grouping customers by age and purchasing behaviour can help businesses create mo
 
 ### Product Strategy
 
-Category and product-level analysis can help identify products that receive higher customer engagement and purchasing activity.
+Category and product-level analysis can help identify products with higher purchasing activity and customer engagement.
 
 ### Customer Retention
 
-Purchase frequency and previous purchase behaviour can be used to identify highly engaged customers and customers who may require targeted retention campaigns.
+Purchase frequency and previous purchase behaviour can help identify highly engaged customers and customers who may require targeted retention campaigns.
 
 ### Subscription Strategy
 
-Comparing subscribed and non-subscribed customers can help businesses understand the relationship between subscriptions and purchasing behaviour.
+Comparing subscribed and non-subscribed customers can help businesses understand the relationship between subscription status and purchasing behaviour.
 
 ### Payment Optimization
 
@@ -551,7 +579,7 @@ This project demonstrates practical skills in:
 
 ## 👨‍💻 Author
 
-### Anirban
+### Anirban Das
 
 **GitHub:**
 https://github.com/anirban2005143a
